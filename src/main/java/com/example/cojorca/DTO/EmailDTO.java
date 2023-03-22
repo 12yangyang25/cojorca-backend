@@ -1,4 +1,4 @@
-package com.example.cojorca.controller;
+package com.example.cojorca.DTO;
 
 public class EmailDTO {
     private String email;
