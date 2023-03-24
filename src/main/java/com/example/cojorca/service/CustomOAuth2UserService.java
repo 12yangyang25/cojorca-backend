@@ -2,6 +2,7 @@ package com.example.cojorca.service;
 
 import com.example.cojorca.DTO.EmailDTO;
 import com.example.cojorca.DTO.UserInfoDTO;
+import com.example.cojorca.domain.Cafe;
 import com.example.cojorca.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -11,13 +12,17 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+@Transactional
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final RestTemplateBuilder restTemplateBuilder;
     private final UserService userService;
@@ -37,12 +42,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         HttpHeaders httpHeaders = createHeaders(userRequest.getAccessToken().getTokenValue());
 
         UserInfoDTO userInfoDTO = getUserInfo(httpHeaders);
-        User user = new User(userInfoDTO.getLogin(), userInfoDTO.getName(), userInfoDTO.getHtml_url(), formattedDate);
-        setEmailIfPresent(httpHeaders, user);
+        User user = new User(userInfoDTO.getLogin(), userInfoDTO.getName(), userInfoDTO.getHtml_url(), setEmailIfPresent(httpHeaders), formattedDate);
 
-        System.out.println(user.getLoginId());
-        System.out.println("회원 등록");
-        userService.registerUser(user);
+        if(!userService.findByLoginId(user.getLoginId()).isPresent()){
+            System.out.println("회원 가입");
+            userService.registerUser(user);
+        }
+        else{
+            System.out.println("이미 가입한 회원입니다");
+
+        }
 
 
         return new DefaultOAuth2User(AuthorityUtils.createAuthorityList("ROLE_USER"), oAuth2User.getAttributes(), "name");
@@ -61,7 +70,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return infoResponse.getBody();
     }
 
-    private void setEmailIfPresent(HttpHeaders httpHeaders, User user) {
+    private String setEmailIfPresent(HttpHeaders httpHeaders) {
         RequestEntity<Void> emailRequest = new RequestEntity<>(httpHeaders, HttpMethod.GET, URI.create("https://api.github.com/user/emails"));
         ResponseEntity<EmailDTO[]> emailResponse = restTemplateBuilder.build().exchange(emailRequest, EmailDTO[].class);
         Optional<String> email = Arrays.stream(emailResponse.getBody())
@@ -69,7 +78,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .map(EmailDTO::getEmail)
                 .findFirst();
 
-        email.ifPresent(user::setEmail);
+        return email.orElse(null);
     }
 
 }

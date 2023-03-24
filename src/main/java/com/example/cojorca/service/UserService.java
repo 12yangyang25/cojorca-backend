@@ -17,15 +17,7 @@ public class UserService {
     }
 
     public void registerUser(User user) {
-        isduplicated(user);
-        userRepository.save(user);
-    }
-
-    private void isduplicated(User user) {
-        userRepository.findByLoginId(user.getLoginId())
-                .ifPresent(m -> { //null이 아니라 값이 있으면 중괄호 안의 로직이 실행, Optional 메소드
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
-                });
+            userRepository.save(user);
     }
 
     public Optional<User> findUser(Long id) {
@@ -40,7 +32,8 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public Optional<User> findByLoginId(String login) {
-        return userRepository.findByLoginId(login);
+    public Optional<User> findByLoginId(String loginId) {
+        return userRepository.findByLoginId(loginId);
     }
+
 }

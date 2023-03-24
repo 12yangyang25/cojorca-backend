@@ -1,11 +1,14 @@
 package com.example.cojorca.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "user_info")
+@NoArgsConstructor //no default constructor for entity 오류 해결
 public class User {
 
     @Id
@@ -27,15 +30,14 @@ public class User {
     @Column(name = "created_at")
     private String createdAt;
 
-    @ManyToMany(mappedBy = "visitors")
-    private List<Cafe> visitedCafes;
-
-    public User(String loginId, String name, String htmlUrl, String createdAt) {
+    public User(String loginId, String name, String htmlUrl, String email, String createdAt) {
         this.loginId = loginId;
         this.name = name;
         this.htmlUrl = htmlUrl;
+        this.email = email;
         this.createdAt = createdAt;
     }
+
 
     public Long getId() {
         return id;
@@ -77,11 +79,4 @@ public class User {
         this.email = email;
     }
 
-    public List<Cafe> getVisitedCafes() {
-        return visitedCafes;
-    }
-
-    public void setVisitedCafes(List<Cafe> visitedCafes) {
-        this.visitedCafes = visitedCafes;
-    }
 }

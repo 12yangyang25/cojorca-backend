@@ -17,10 +17,9 @@ public class CafeService {
     }
 
     public void postCafe(Cafe cafe) {
-        cafeRepository.findByCafe_name(cafe.getCafeName()).ifPresent(m -> {
+        cafeRepository.findByCafeName(cafe.getCafeName()).ifPresent(m -> {
             throw new IllegalStateException("이미 존재하는 카페입니다.");
         });
-
         cafeRepository.save(cafe);
     }
 

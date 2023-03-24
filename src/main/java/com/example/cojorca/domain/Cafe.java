@@ -1,11 +1,13 @@
 package com.example.cojorca.domain;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "cafe_info")
+@NoArgsConstructor
 public class Cafe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
