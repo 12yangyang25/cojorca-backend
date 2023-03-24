@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface CafeRepository {
     Cafe save(Cafe cafe);
+
     Optional<Cafe> findById(Long id);
+
     List<Cafe> findAll();
+
     void deleteById(Long id);
-    Optional<Cafe> findByName(String name);
+
+    Optional<Cafe> findByCafeName(String cafeName);
 }

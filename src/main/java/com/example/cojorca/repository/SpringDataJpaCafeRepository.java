@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface SpringDataJpaCafeRepository extends JpaRepository<Cafe, Long>, CafeRepository {
     @Override
-    Optional<Cafe> findByName(String name);
+    Optional<Cafe> findByCafeName(String cafeName);
 }

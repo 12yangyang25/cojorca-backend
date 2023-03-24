@@ -5,24 +5,30 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="cafeInfo")
+@Table(name = "cafe_info")
 public class Cafe {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    private long id; //id
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user; //카페를 등록한 유저 정보
-    @Column(name="cafeName")
-    private String name; //카페 이름
-    @Column(name="address")
+    @Column(name = "cafe_name")
+    private String cafeName; //카페 이름
+    @Column(name = "address")
     private String address; //카페 주소
-    @Column(name="additionalInfo")
-    private String additionalInfo; //카페 부가 정보
-    @Column(name="imgUrls")
-    private String[] imgUrls;
+    @Column(name = "naver_place_id")
+    private long naverPlaceId;
+    @Column(name = "lat")
+    private double lat; //위도
+    @Column(name = "lng")
+    private double lng; //경도
+    @Column(name = "tags")
+    private String tags; //카페 부가 정보
+    @ElementCollection
+    @CollectionTable(name = "cafe_imgUrls", joinColumns = @JoinColumn(name = "cafe_id"))
+    @Column(name="imgUrl")
+    private List<String> imgUrls; //이미지 url
     @ManyToMany
     @JoinTable(
             name = "cafe_visitor",
@@ -30,17 +36,21 @@ public class Cafe {
             inverseJoinColumns = @JoinColumn(name = "visitor_id")
     )
     private List<User> visitors;
-    @Column(name="createdAt")
+    @Column(name = "created_at")
     private String createdAt;
 
-    public Cafe(User user, String cafeName, String address, String additionalInfo, String[] imgUrls, String createdAt) {
+    public Cafe(User user, String cafeName, String address, long naverPlaceId, double lat, double lng, String tags, List<String> imgUrls, String createdAt) {
         this.user = user;
-        this.name = cafeName;
+        this.cafeName = cafeName;
         this.address = address;
-        this.additionalInfo = additionalInfo;
+        this.naverPlaceId = naverPlaceId;
+        this.lat = lat;
+        this.lng = lng;
+        this.tags = tags;
         this.imgUrls = imgUrls;
         this.createdAt = createdAt;
     }
+
     public long getId() {
         return id;
     }
@@ -57,12 +67,12 @@ public class Cafe {
         this.user = user;
     }
 
-    public String getName() {
-        return name;
+    public String getCafeName() {
+        return cafeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCafeName(String cafeName) {
+        this.cafeName = cafeName;
     }
 
     public String getAddress() {
@@ -73,19 +83,43 @@ public class Cafe {
         this.address = address;
     }
 
-    public String getAdditionalInfo() {
-        return additionalInfo;
+    public double getLat() {
+        return lat;
     }
 
-    public void setAdditionalInfo(String additionalInfo) {
-        this.additionalInfo = additionalInfo;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public String[] getImgUrls() {
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public long getNaverPlaceId() {
+        return naverPlaceId;
+    }
+
+    public void setNaverPlaceId(long naverPlaceId) {
+        this.naverPlaceId = naverPlaceId;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public List<String> getImgUrls() {
         return imgUrls;
     }
 
-    public void setImgUrls(String[] imgUrls) {
+    public void setImgUrls(List<String> imgUrls) {
         this.imgUrls = imgUrls;
     }
 

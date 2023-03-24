@@ -5,35 +5,35 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="userInfo")
+@Table(name = "user_info")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="login")
+    @Column(name = "login_id")
     private String loginId;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="html_url")
-    private String html_url;
+    @Column(name = "html_url")
+    private String htmlUrl;
 
-    @Column(name="email")
+    @Column(name = "email")
     private String email;
 
-    @Column(name="createdAt")
+    @Column(name = "created_at")
     private String createdAt;
 
     @ManyToMany(mappedBy = "visitors")
     private List<Cafe> visitedCafes;
 
-    public User(String login, String name, String html_url, String createdAt) {
-        this.loginId = login;
+    public User(String loginId, String name, String htmlUrl, String createdAt) {
+        this.loginId = loginId;
         this.name = name;
-        this.html_url = html_url;
+        this.htmlUrl = htmlUrl;
         this.createdAt = createdAt;
     }
 
@@ -61,12 +61,12 @@ public class User {
         this.name = name;
     }
 
-    public String getHtml_url() {
-        return html_url;
+    public String getHtmlUrl() {
+        return htmlUrl;
     }
 
-    public void setHtml_url(String html_url) {
-        this.html_url = html_url;
+    public void setHtmlUrl(String htmlUrl) {
+        this.htmlUrl = htmlUrl;
     }
 
     public String getEmail() {

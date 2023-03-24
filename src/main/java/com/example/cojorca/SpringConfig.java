@@ -16,6 +16,7 @@ public class SpringConfig {
 
     private final CafeRepository cafeRepository;
     private final UserRepository userRepository;
+
     @Autowired
     public SpringConfig(CafeRepository cafeRepository, UserRepository userRepository) {
         this.cafeRepository = cafeRepository;
@@ -23,19 +24,22 @@ public class SpringConfig {
     }
 
     @Bean
-    public RestTemplateBuilder restTemplateBuilder(){
+    public RestTemplateBuilder restTemplateBuilder() {
         return new RestTemplateBuilder();
     }
+
     @Bean
-    public CustomOAuth2UserService customOAuth2UserService(){
+    public CustomOAuth2UserService customOAuth2UserService() {
         return new CustomOAuth2UserService(restTemplateBuilder(), userService());
     }
+
     @Bean
-    public CafeService cafeService(){
+    public CafeService cafeService() {
         return new CafeService(cafeRepository);
     }
+
     @Bean
-    public UserService userService(){
+    public UserService userService() {
         return new UserService(userRepository);
     }
 
